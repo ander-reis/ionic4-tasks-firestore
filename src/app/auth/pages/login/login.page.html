@@ -3,6 +3,16 @@
         <ion-icon name="done-all" color="primary" class="icon-7em"></ion-icon>
     </h1>
     <form [formGroup]="authForm" (submit)="onSubmit()">
+
+        <ng-container *ngIf="!configs.isSignIn">
+            <ion-item>
+                <ion-icon name="person" color="primary" slot="start"></ion-icon>
+                <ion-input type="text" placeholder="Name" formControlName="name"></ion-input>
+                <ion-note slot="end" color="danger" *ngIf="name.dirty && name.hasError('required')">Obrigatório</ion-note>
+                <ion-note slot="end" color="danger" *ngIf="name.dirty && name.hasError('minlength')">Minimo 3 caracteres</ion-note>
+            </ion-item>
+        </ng-container>
+
         <ion-item>
             <ion-icon name="mail" color="primary" slot="start"></ion-icon>
             <ion-input type="email" placeholder="Email" formControlName="email" inputmode="email" autofocus="true"></ion-input>
@@ -15,9 +25,9 @@
             <ion-note slot="end" color="danger" *ngIf="password.dirty && password.hasError('required')">Obrigatório</ion-note>
             <ion-note slot="end" color="danger" *ngIf="password.dirty && password.hasError('minlength')">Minimo 6 caracteres</ion-note>
         </ion-item>
-        <ion-button type="submit" expand="block" [disabled]="authForm.invalid">Login</ion-button>
+        <ion-button type="submit" expand="block" [disabled]="authForm.invalid">{{ configs.action }}</ion-button>
     </form>
-    <ion-button expand="block" fill="clear">Criar Conta</ion-button>
+    <ion-button expand="block" fill="clear" (click)="changeAuthAction()">{{ configs.actionChange }}</ion-button>
     <ion-button expand="block">
         <ion-icon name="logo-facebook" slot="start"></ion-icon>
         Login com Facebook
