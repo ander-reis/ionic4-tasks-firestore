@@ -5,9 +5,17 @@ import {IonicModule, IonicRouteStrategy} from '@ionic/angular';
 import {StatusBar} from '@ionic-native/status-bar/ngx';
 import {SplashScreen} from '@ionic-native/splash-screen/ngx';
 
+import {AngularFireModule} from '@angular/fire';
+import {AngularFireAuthModule} from '@angular/fire/auth';
+
+import {environment} from '../../environments/environment';
+
+
 @NgModule({
     imports: [
-        IonicModule.forRoot()
+        IonicModule.forRoot(),
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFireAuthModule
     ],
     exports: [
         BrowserModule,

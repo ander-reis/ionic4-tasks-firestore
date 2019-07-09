@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AuthService} from '../../../core/services/auth.service';
+import {AuthProvider} from '../../../core/services/auth.types';
+import {OverlayService} from '../../../core/services/overlay.service';
 
 @Component({
     selector: 'app-login',
@@ -9,6 +12,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 export class LoginPage implements OnInit {
 
     authForm: FormGroup;
+    authProviders = AuthProvider;
     configs = {
         isSignIn: true,
         action: 'Login',
@@ -16,13 +20,16 @@ export class LoginPage implements OnInit {
     };
     private nameControll = new FormControl('', [Validators.required, Validators.minLength(3)]);
 
-    constructor(private fb: FormBuilder) {
+    constructor(private authService: AuthService, private fb: FormBuilder, private overlayService: OverlayService) {
     }
 
     ngOnInit(): void {
         this.createForm();
     }
 
+    /**
+     * valida form
+     */
     private createForm(): void {
         this.authForm = this.fb.group({
             email: ['', [Validators.required, Validators.email]],
@@ -30,18 +37,30 @@ export class LoginPage implements OnInit {
         });
     }
 
+    /**
+     * recebe name
+     */
     get name(): FormControl {
         return <FormControl> this.authForm.get('name');
     }
 
+    /**
+     * recebe email
+     */
     get email(): FormControl {
         return <FormControl> this.authForm.get('email');
     }
 
+    /**
+     * recebe password
+     */
     get password(): FormControl {
         return <FormControl> this.authForm.get('password');
     }
 
+    /**
+     * altera ação auth
+     */
     changeAuthAction(): void {
         this.configs.isSignIn = !this.configs.isSignIn;
         const {isSignIn} = this.configs;
@@ -50,7 +69,28 @@ export class LoginPage implements OnInit {
         !isSignIn ? this.authForm.addControl('name', this.nameControll) : this.authForm.removeControl('name');
     }
 
-    onSubmit(): void {
-        console.log('AuthForm', this.authForm.value);
+    /**
+     * recebe submit
+     */
+    async onSubmit(provider: AuthProvider): Promise<void> {
+        // habilita loading
+        const loading = await this.overlayService.loading();
+        try {
+            const credentials = await this.authService.authenticate({
+                isSignIn: this.configs.isSignIn,
+                user: this.authForm.value,
+                provider
+            });
+            // console.log('AuthForm', this.authForm.value);
+            console.log('Authenticated', credentials);
+            console.log('redirect');
+        } catch (e) {
+            console.log('Auth error: ', e);
+            // habilita toast
+            await this.overlayService.toast({message: e.message});
+        } finally {
+             // encerra loading
+            loading.dismiss();
+        }
     }
 }
