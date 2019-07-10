@@ -4,16 +4,7 @@
 
 export const environment = {
     production: false,
-    firebase:
-        {
-            apiKey: 'AIzaSyDbNapnm5AFWu2M4gyDLI_-UkJJeOTRFWI',
-            authDomain: 'ionic-firestore-tasks-affd0.firebaseapp.com',
-            databaseURL: 'https://ionic-firestore-tasks-affd0.firebaseio.com',
-            projectId: 'ionic-firestore-tasks-affd0',
-            storageBucket: '',
-            messagingSenderId: '1060928436954',
-            appId: '1:1060928436954:web:2adf0f6cb558022b'
-        }
+    firebase: {}
 };
 
 /*
