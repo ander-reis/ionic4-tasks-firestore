@@ -13,7 +13,7 @@ export abstract class Firestore<T extends { id: string }> {
      * @string path
      * @queryFn queryFn
      */
-    protected setCollection(path: string, queryFn?: QueryFn) {
+    protected setCollection(path: string, queryFn?: QueryFn): void {
         this.collection = path ? this.db.collection(path, queryFn) : null;
     }
 
