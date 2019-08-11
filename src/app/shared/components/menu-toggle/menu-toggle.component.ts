@@ -3,8 +3,8 @@ import {Component, Input} from '@angular/core';
 @Component({
     selector: 'app-menu-toggle',
     template: `
-        <ion-buttons menu="menu">
-            <ion-menu-toggle>
+        <ion-buttons>
+            <ion-menu-toggle [menu]="menu">
                 <ion-button>
                     <ion-icon slot="icon-only" name="menu"></ion-icon>
                 </ion-button>
